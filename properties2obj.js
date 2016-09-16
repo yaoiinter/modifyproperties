@@ -43,7 +43,7 @@ function pps2obj(){
 					tempobj[objkey] = objvalue;
 					ppsobj["result"].push(tempobj);
 				}else if(tempstr == ""){
-					ppsobj["result"].push(" ");
+					ppsobj["result"].push("");
 				}
 			}
 
@@ -65,7 +65,7 @@ function pps2obj(){
 			}
 
 			for(var k=0; k<srcarry.length; k++){
-				if(srcarry[k].constructor ===  String || srcarry[k] == " "){
+				if(srcarry[k].constructor ===  String || srcarry[k] == ""){
 					resultStr += srcarry[k]+"\n";
 				}else{
 					for(q in srcarry[k]){
