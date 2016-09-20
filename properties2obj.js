@@ -22,8 +22,10 @@ function pps2obj(){
 		}
 		var rdfile = this.file;
 		var datarry = [];
-		var ppsobj = {"result":[]};
+		var ppsobj = [];
 		var resultStr = "";
+
+		//读取properties文件,保存到ppsobj中;
 		fs.readFile(rdfile,"utf8",function(err,data){
 			if(err){
 				console.error("文件读取出错:"+err);
@@ -33,21 +35,21 @@ function pps2obj(){
 
 			for(var i=0; i<datarry.length; i++){
 				var tempstr = datarry[i];
+				//注释行,作为String存入数组
 				if(tempstr.indexOf("#") == 0 || tempstr.indexOf("!") ==0){
-					ppsobj["result"].push(tempstr);
+					ppsobj.push(tempstr);
+				//键值对作为Object存入数组
 				}else if(tempstr != ""){
 					var temparry = tempstr.split("=");
 					var objvalue = temparry[1].replace(/^\ {0,}/,"");
 					var objkey = temparry[0].replace(/\ {0,}$/,"");
 					var tempobj= {};
 					tempobj[objkey] = objvalue;
-					ppsobj["result"].push(tempobj);
+					ppsobj.push(tempobj);
 				}else if(tempstr == ""){
-					ppsobj["result"].push("");
+					ppsobj.push("");
 				}
 			}
-
-			var srcarry = ppsobj["result"];
 
 			if(modarry.length>0){ 
 				var malen = modarry.length;
@@ -55,21 +57,21 @@ function pps2obj(){
 					var modobj = modarry[i];
 					console.log();
 					for(p in modobj){
-						for(var j=0;j<srcarry.length;j++){
-							if(srcarry[j].hasOwnProperty(p)){
-								srcarry[j][p] = modobj[p];
+						for(var j=0;j<ppsobj.length;j++){
+							if(ppsobj[j].hasOwnProperty(p)){
+								ppsobj[j][p] = modobj[p];
 							}
 						}
 					}
 				}
 			}
 
-			for(var k=0; k<srcarry.length; k++){
-				if(srcarry[k].constructor ===  String || srcarry[k] == ""){
-					resultStr += srcarry[k]+"\n";
+			for(var k=0; k<ppsobj.length; k++){
+				if(ppsobj[k].constructor ===  String || ppsobj[k] == ""){
+					resultStr += ppsobj[k]+"\n";
 				}else{
-					for(q in srcarry[k]){
-						resultStr += q+"="+srcarry[k][q]+"\n";
+					for(q in ppsobj[k]){
+						resultStr += q+"="+ppsobj[k][q]+"\n";
 					}
 				}
 			}
